@@ -16,14 +16,6 @@ namespace MQTTW
         printf("Создал MQTTwrapper.\n");
     };
 
-    void MosqMqttWrapper::on_connect(int rc)
-    {
-        if (rc == 0)
-        {
-            subscribe(NULL, "M30-212B-18/Door");
-        }
-    }
-
     void MosqMqttWrapper::on_message(const struct mosquitto_message *message){
         setlocale(LC_CTYPE, "rus");
         if(!strcmp(message->topic, "M30-212B-18/Door")){
@@ -31,8 +23,16 @@ namespace MQTTW
             sprintf(buffer,"%s",message->payload);
             std::string msg = buffer;
             std::cout<<msg<<std::endl;
+            mqttmessages.push_back(msg);
         }
     };
+
+    std::string MosqMqttWrapper::GetMessage()
+    {
+        std::string message = mqttmessages.back();
+        mqttmessages.pop_back();
+        return message;
+    }
 
     bool MosqMqttWrapper::send_message(const  char * message)
     {

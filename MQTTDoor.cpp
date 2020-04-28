@@ -34,8 +34,10 @@ namespace MQTTDoor
     void MQTTDoorControlLoop(Door* d, MosqMqttWrapper* MQTT)
     {
         string inputString;
-        while (cin >> inputString)
+        while (1)
         {
+            inputString = MQTT->GetMessage();
+            
             if (inputString == "@dooron")
             {
                 d->TurnOn();

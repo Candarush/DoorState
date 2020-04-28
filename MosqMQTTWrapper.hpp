@@ -2,18 +2,20 @@
 
 #include "/usr/local/include/mosquittopp.h"
 #include <cstring>
+#include <string>
 #include <iostream>
+#include <vector>
 
-extern std::vector<std::string> mymessages;
 namespace MQTTW
 {
     class MosqMqttWrapper : public mosqpp::mosquittopp
     {
-        public:
-        MosqMqttWrapper(char const  *id, const char *host, int port);
-
-        void on_connect(int rc);
+    private:
         void on_message(const struct mosquitto_message *message);
+        std::vector<std::string> mqttmessages;
+    public:
+        MosqMqttWrapper(char const  *id, const char *host, int port);
+        std::string GetMessage();
         bool send_message(const  char * message);
     };
 }
